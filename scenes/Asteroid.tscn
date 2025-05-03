@@ -12,6 +12,7 @@ bounce = 0.5
 radius = 25.0
 
 [node name="Asteroid" type="RigidBody2D"]
+collision_mask = 3
 physics_material_override = SubResource("PhysicsMaterial_1ve3k")
 contact_monitor = true
 max_contacts_reported = 8
@@ -29,3 +30,8 @@ shape = SubResource("CircleShape2D_f35hr")
 
 [node name="Health" type="Node" parent="Components"]
 script = ExtResource("3_aj8vh")
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 1.5
+one_shot = true
+autostart = true
