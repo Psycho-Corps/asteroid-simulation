@@ -17,38 +17,22 @@ func _process(_delta: float) -> void:
 						
 func spawn_asteroids(group : String, s_position : Vector2) -> void:
 	var asteroid = asteroid_scene.instantiate()
-	var components = asteroid.find_child("Components")
-	var health_component = components.find_child("Health")
+	var health_component = asteroid.find_child("HealthComponent")
 	match group:
 		"Big":
-			health_component.hp = 30
+			health_component.max_hp = 30
+			health_component.set_health()
 			var random_position = Vector2(randf_range(0, window_size.x), randf_range(0, window_size.y))
 			asteroid.global_position = random_position
 			asteroid.add_to_group("Big")
-		"Medium":
-			health_component.hp = 20
-			asteroid.modulate = Color(1, 0, 1, 1)
-			asteroid.global_position = s_position
-			asteroid.add_to_group("Medium")
-		"Small":
-			health_component.hp = 10
-			asteroid.modulate = Color(0, 1, 1, 1)
-			asteroid.global_position = s_position
-			asteroid.add_to_group("Small")
-	asteroid.call_deferred("connect", "body_entered", _on_body_entered)
+		#"Medium":
+			#health_component.hp = 20
+			#asteroid.modulate = Color(1, 0, 1, 1)
+			#asteroid.global_position = s_position
+			#asteroid.add_to_group("Medium")
+		#"Small":
+			#health_component.hp = 10
+			#asteroid.modulate = Color(0, 1, 1, 1)
+			#asteroid.global_position = s_position
+			#asteroid.add_to_group("Small")
 	call_deferred("add_child", asteroid)
-			
-func _on_body_entered(body: Node) -> void:
-	if body.has_node("Components"):
-		var components = body.find_child("Components")
-		if components.find_child("Health"):
-			if components.find_child("Health").hp <= 0:
-				if body.is_in_group("Big"):
-					for _i in range(2):
-						spawn_asteroids("Medium", body.global_position)
-				elif body.is_in_group("Medium"):
-					for _i in range(4):
-						spawn_asteroids("Small", body.global_position)
-				body.queue_free()
-			else:
-				components.find_child("Health").hp -= 10
